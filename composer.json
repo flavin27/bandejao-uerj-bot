@@ -9,6 +9,7 @@
         "ext-curl": "*",
         "ext-dom": "*",
         "ext-libxml": "*",
+        "abraham/twitteroauth": "^7.0",
         "laravel/framework": "^11.0",
         "laravel/tinker": "^2.9",
         "mongodb/laravel-mongodb": "4.2",

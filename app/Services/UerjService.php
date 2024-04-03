@@ -12,7 +12,7 @@ class UerjService
 
     private static string $url = "https://www.restauranteuniversitario.uerj.br/#cardapio";
 
-    public static function scrape_data(): array
+    public function scrape_data(): array
     {
         $content = self::fetchContent();
 

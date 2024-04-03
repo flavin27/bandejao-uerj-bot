@@ -49,8 +49,15 @@ class UerjService
             $prato[4] = self::addSpace($prato[4]);
             return $prato;
         }, $cardapioNaoFormatado);
+        $keys = self::GetCardapioKeys();
 
-        return $cardapioFormatado;
+        $caradapioFinal = array_map(function ($prato) use ($keys) {
+            return array_combine($keys, $prato);
+        }, $cardapioFormatado);
+
+        $diasDaSemana = self::getDiasDaSemanaKeys();
+        $caradapioFinal =  array_combine($diasDaSemana, $caradapioFinal);
+        return $caradapioFinal;
     }
 
     public static function fetchContent(): string
@@ -182,5 +189,15 @@ class UerjService
 
         }
         return $stringCorrigida;
+    }
+
+    public static function GetCardapioKeys(): array
+    {
+        return ['Saladas', 'Prato Principal', 'Ovolactovegetariano', 'Guarnição', 'Acompanhamentos', 'Sobremesa'];
+    }
+
+    public static function getDiasDaSemanaKeys(): array
+    {
+        return ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
     }
 }

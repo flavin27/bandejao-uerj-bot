@@ -41,8 +41,16 @@ class UerjService
                 }
             }
         }
+        $cardapioNaoFormatado =  array_chunk($pratos, 6);
+        $cardapioFormatado = array_map(function ($prato) {
+            $prato =  self::addGlutenAlert($prato);
+            $prato = self::addLactoseAlert($prato);
+            $prato = self::normalizeSpaces($prato);
+            $prato[4] = self::addSpace($prato[4]);
+            return $prato;
+        }, $cardapioNaoFormatado);
 
-        return array_chunk($pratos, 6);
+        return $cardapioFormatado;
     }
 
     public static function fetchContent(): string
@@ -115,12 +123,12 @@ class UerjService
             return [];
         }
 
-        $string = self::addSpace($cardapio[$dia][4]);
-        $cardapio[$dia][4] = $string;
-
-        $cardapio[$dia] = self::addGlutenAlert($cardapio[$dia]);
-        $cardapio[$dia] = self::addLactoseAlert($cardapio[$dia]);
-        $cardapio[$dia] = self::normalizeSpaces($cardapio[$dia]);
+//        $string = self::addSpace($cardapio[$dia][4]);
+//        $cardapio[$dia][4] = $string;
+//
+//        $cardapio[$dia] = self::addGlutenAlert($cardapio[$dia]);
+//        $cardapio[$dia] = self::addLactoseAlert($cardapio[$dia]);
+//        $cardapio[$dia] = self::normalizeSpaces($cardapio[$dia]);
 
 
         return $cardapio[$dia];

@@ -24,7 +24,7 @@ class FetchDataCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         $this->info('Fetching data from UERJ website...');
 

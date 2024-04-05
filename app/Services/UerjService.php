@@ -14,6 +14,16 @@ class UerjService
 
     public function scrape_data(): array
     {
+        $content = '';
+
+        while (!$content) {
+            try {
+                $content = self::fetchContent();
+            } catch (Exception $e) {
+                Log::error("Erro ao recuperar dados do site da UERJ: " . $e->getMessage());
+            }
+        }
+
         $content = self::fetchContent();
 
         $dom = new DOMDocument();

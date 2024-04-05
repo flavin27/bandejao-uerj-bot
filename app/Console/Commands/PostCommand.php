@@ -58,7 +58,44 @@ class PostCommand extends Command
             "Acompanhamentos: " . $cardapio['acompanhamentos'] . PHP_EOL .
             "Sobremesa: " . $cardapio['sobremesa'];
 
+        if (strlen($payload) > 280) {
+            $tweet = $dataHoje . "-" . $cardapio['dia_da_semana'] . PHP_EOL .
+                "Saladas: " . $cardapio['saladas'] . PHP_EOL .
+                "Prato principal: " . $cardapio['prato_principal'] . PHP_EOL .
+                "Ovolactovegetariano: " . $cardapio['ovolactovegetariano'] . PHP_EOL .
+                "Guarnição: " . $cardapio['guarnicao'];
+            $reply = "Acompanhamentos: " . $cardapio['acompanhamentos'] . PHP_EOL .
+                "Sobremesa: " . $cardapio['sobremesa'];
+            $responseTweet = $this->twitterService->post_tweet($tweet);
+            if ($responseTweet->getStatusCode() != 200) {
+                $this->error('Error posting data to twitter!');
+                $this->info('Response: ' . $responseTweet->getContent());
+                return;
+            }
+            $responseTweet = json_decode($responseTweet->getContent());
 
+            $responseReply = $this->twitterService->post_reply($reply, $responseTweet->tweet_id);
+
+            if ($responseReply->getStatusCode() != 200) {
+                $this->error('Error posting data to twitter!');
+                $this->info('Response: ' . $responseReply->getContent());
+                return;
+            }
+
+            $this->info('Data posted successfully!');
+            return;
+
+        }
+
+        $response = $this->twitterService->post_tweet($payload);
+
+        if ($response->getStatusCode() != 200) {
+            $this->error('Error posting data to twitter!');
+            $this->info('Response: ' . $response->getContent());
+            return;
+        }
+
+        $this->info('Data posted successfully!');
     }
 
 

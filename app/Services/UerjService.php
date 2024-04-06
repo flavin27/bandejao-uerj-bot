@@ -84,7 +84,7 @@ class UerjService
         $content = curl_exec($ch);
         if (curl_errno($ch)) {
             echo 'Erro cURL: ' . curl_error($ch);
-            die;
+
         }
         curl_close($ch);
 

@@ -1,0 +1,40 @@
+name: Run UERJ Command
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  run-ufrj-command:
+    name: Run PHP Artisan UERJ Command
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.2
+        with:
+          envkey_API_KEY: ${{secrets.API_KEY}}
+          envkey_API_SECRET_KEY: ${{secrets.API_SECRET_KEY}}
+          envkey_ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          envkey_ACCESS_SECRET: ${{secrets.ACCESS_SECRET}}
+          envkey_MONGODB_URL: ${{secrets.MONGODB_URL}}
+          file_name: .env
+
+      - name: Install Composer dependencies
+        run: composer install -q --no-interaction --no-scripts --no-progress --ignore-platform-reqs --prefer-dist
+
+      - name: Update dependencies
+        run: composer update
+
+      - name: Run PHP Artisan UERJ Command
+        run: php artisan uerj:data

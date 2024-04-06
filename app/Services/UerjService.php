@@ -23,9 +23,6 @@ class UerjService
                 Log::error("Erro ao recuperar dados do site da UERJ: " . $e->getMessage());
             }
         }
-
-        $content = self::fetchContent();
-
         $dom = new DOMDocument();
         libxml_use_internal_errors(true);
         $dom->loadHTML($content);
@@ -67,6 +64,12 @@ class UerjService
 
         $diasDaSemana = self::getDiasDaSemanaKeys();
         $caradapioFinal =  array_combine($diasDaSemana, $caradapioFinal);
+
+        if (count($caradapioFinal) === 0) {
+            echo "o site ainda não atualizou o cardápio da semana. Tente novamente mais tarde :P";
+            die;
+        }
+
         return $caradapioFinal;
     }
 

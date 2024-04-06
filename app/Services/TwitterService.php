@@ -98,4 +98,24 @@ class TwitterService
         }
         return json_encode($data);
     }
+
+    public function getMe(): JsonResponse {
+        $api = $this->get_api();
+        $response = $api->get('users/me');
+        $response = json_encode($response);
+        $response = json_decode($response, true);
+        if ($response) {
+            $data = [
+                'status' => 'success',
+                'message' => 'user fetched',
+                'user_id' => $response['data']['id']
+            ];
+        } else {
+            $data = [
+                'status' => 'error',
+                'message' => 'Failed to fetch'
+            ];
+        }
+        return response()->json($data);
+    }
 }

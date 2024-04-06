@@ -4,6 +4,7 @@ namespace App\Services;
 
 use DOMDocument;
 use DOMXPath;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Http;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -91,7 +92,7 @@ class UerjService
         return $content;
     }
 
-    private static function normalizeString(string $string): string
+    public static function normalizeString(string $string): string
     {
         $string = print_r($string, true);
         $string = str_replace(["\n", "\r"], '', $string);
@@ -105,14 +106,14 @@ class UerjService
         return $string;
     }
 
-    private static function removeDateAndDay(string $string, string $day, string $date): string
+    public static function removeDateAndDay(string $string, string $day, string $date): string
     {
         $string = strtolower($string);
         $string = str_replace([$day, $date], '', $string);
         return $string;
     }
 
-    private static function extractDia(string $texto_corrigido, string $dia): string
+    public static function extractDia(string $texto_corrigido, string $dia): string
     {
         if (preg_match('/^(Segunda|Terça|Quarta|Quinta|Sexta)$/', $texto_corrigido)) {
             return $texto_corrigido;
@@ -120,7 +121,7 @@ class UerjService
         return $dia;
     }
 
-    private static function extractData(string $texto_corrigido, string $data): string
+    public static function extractData(string $texto_corrigido, string $data): string
     {
         if (preg_match('/^\d{1,2} [A-Za-z]{3}$/', $texto_corrigido)) {
             return $texto_corrigido;
@@ -128,7 +129,7 @@ class UerjService
         return $data;
     }
 
-    private static function processPrato(string $texto_corrigido, string $dia, string $data, array &$pratos): void
+    public static function processPrato(string $texto_corrigido, string $dia, string $data, array &$pratos): void
     {
         if (preg_match('/^(Saladas|Prato Principal|Ovolactovegetariano|Guarnição|Acompanhamentos|Sobremesa)/', $texto_corrigido)) {
             $texto_corrigido = str_replace(array('Saladas', 'Prato Principal', 'Ovolactovegetariano', 'Guarnição', 'Acompanhamentos', 'Sobremesa'), '', $texto_corrigido);

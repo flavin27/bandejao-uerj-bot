@@ -1,4 +1,4 @@
-name: Run UERJ Command
+name: Post Tweet
 
 on:
   workflow_dispatch:

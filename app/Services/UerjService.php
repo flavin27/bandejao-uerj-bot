@@ -21,7 +21,8 @@ class UerjService
             try {
                 $content = self::fetchContent();
             } catch (Exception $e) {
-                Log::error("Erro ao recuperar dados do site da UERJ: " . $e->getMessage());
+                echo 'Erro ao buscar o conteúdo da página: ' . $e->getMessage();
+                sleep(3600);
             }
         }
         $dom = new DOMDocument();
@@ -59,19 +60,24 @@ class UerjService
         }, $cardapioNaoFormatado);
         $keys = self::GetCardapioKeys();
 
-        $caradapioFinal = array_map(function ($prato) use ($keys) {
+        $cardapioFinal = array_map(function ($prato) use ($keys) {
             return array_combine($keys, $prato);
         }, $cardapioFormatado);
 
-        $diasDaSemana = self::getDiasDaSemanaKeys();
-        $caradapioFinal =  array_combine($diasDaSemana, $caradapioFinal);
-
-        if (count($caradapioFinal) === 0) {
+        if (empty($cardapioFinal)) {
             echo "o site ainda não atualizou o cardápio da semana. Tente novamente mais tarde :P";
             die;
         }
 
-        return $caradapioFinal;
+        $diasDaSemana = self::getDiasDaSemanaKeys();
+        $cardapioFinal =  array_combine($diasDaSemana, $cardapioFinal);
+
+        if (count($cardapioFinal) === 0) {
+            echo "o site ainda não atualizou o cardápio da semana. Tente novamente mais tarde :P";
+            die;
+        }
+
+        return $cardapioFinal;
     }
 
     public static function fetchContent(): string

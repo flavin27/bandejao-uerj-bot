@@ -39,6 +39,14 @@ class FetchDataCommand extends Command
     {
         $this->info('Fetching data from UERJ website...');
 
+        $dataHoje = Date("d/m");
+        $diaHoje = intval(Date("w")) -1;
+
+        if ($diaHoje > 4 || $diaHoje < 0) {
+            $this->info('Today is not a weekday, no data to fetch');
+            return;
+        }
+
         $result = $this->uerjService->scrape_data();
 
         $this->info('Data fetched successfully!');
